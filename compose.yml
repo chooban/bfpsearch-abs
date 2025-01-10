@@ -1,10 +1,10 @@
 ---
 services:
-  audioteka-abs:
-    image: lakafior/audioteka-abs
-    container_name: audioteka-abs
+  bfpsearch-abs:
+    image: JarrodMiller/bfpsearch-abs
+    container_name: bfpsearch-abs
     environment:
-      - LANGUAGE=pl
+      - LANGUAGE=en
     restart: unless-stopped
     ports:
       - "3001:3001"
