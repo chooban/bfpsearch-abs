@@ -19,14 +19,15 @@ app.use((req, res, next) => {
   next();
 });
 
-const language = process.env.LANGUAGE || 'pl';  // Default to Polish if not specified
+const language = process.env.LANGUAGE || 'en';  // Default to English if not specified
 
-class AudiotekaProvider {
+class BigFinishProvider {
   constructor() {
-    this.id = 'audioteka';
-    this.name = 'Audioteka';
-    this.baseUrl = 'https://audioteka.com';
-    this.searchUrl = language === 'cz' ? 'https://audioteka.com/cz/vyhledavani' : 'https://audioteka.com/pl/szukaj';
+    this.id = 'bigfinish';
+    this.name = 'BigFinish';
+    this.baseUrl = 'https://www.bigfinish.com';
+    //we're only supporting english for now :)
+    this.searchUrl = language === 'en' ? 'https://www.bigfinish.com/search_results?search_value_selected=0&search_term=' : 'https://www.bigfinish.com/search_results?search_value_selected=0&search_term=';
   }
 
   async searchBooks(query, author = '') {
