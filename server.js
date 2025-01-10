@@ -19,21 +19,18 @@ app.use((req, res, next) => {
   next();
 });
 
-const language = process.env.LANGUAGE || 'en';  // Default to English if not specified
-
-class BigFinishProvider {
+class AudiotekaProvider {
   constructor() {
     this.id = 'bigfinish';
     this.name = 'BigFinish';
     this.baseUrl = 'https://www.bigfinish.com';
-    //we're only supporting english for now :)
-    this.searchUrl = language === 'en' ? 'https://www.bigfinish.com/search_results?search_value_selected=0&search_term=' : 'https://www.bigfinish.com/search_results?search_value_selected=0&search_term=';
+    this.searchUrl = 'https://bigfinish.com/search_results?search_value_selected=0';
   }
 
   async searchBooks(query, author = '') {
     try {
       console.log(`Searching for: "${query}" by "${author}"`);
-      const searchUrl = `${this.searchUrl}?query=${encodeURIComponent(query)}`;
+      const searchUrl = `${this.searchUrl}&search_term=${encodeURIComponent(query)}`;
       
       const response = await axios.get(searchUrl);
       const $ = cheerio.load(response.data);
@@ -41,35 +38,49 @@ class BigFinishProvider {
       console.log('Search URL:', searchUrl);
 
       const matches = [];
-      const $books = $('.adtk-item.teaser_teaser__kRYek');
+      const $books = $('.grid-box');
       console.log('Number of books found:', $books.length);
 
       $books.each((index, element) => {
         const $book = $(element);
         
-        const title = $book.find('.teaser_title__CZ9eq').text().trim();
-        const bookUrl = this.baseUrl + $book.find('.teaser_mainLink__YBhax').attr('href');
-        const authors = [$book.find('.teaser_author__BV8Ke').text().trim()];
-        const cover = $book.find('.teaser_cover__2EVLn').attr('src');
-        const rating = parseFloat($book.find('.teaser_rating__ksFn3').text().trim()) || null;
+        const title = $book.find('.title').text().trim();
+        const bookUrlElement = $book.find('.grid-content h3.title a');
+        
+        // Check if the element exists and has the href
+        if(bookUrlElement.length > 0){
+           const relativeBookUrl = bookUrlElement.attr('href');
+        
+          let bookUrl = relativeBookUrl ? this.baseUrl + relativeBookUrl : null;
+        if (bookUrl) {
+           console.log('bookUrl:', bookUrl);
+          let cover = $book.find('.grid-pict img').attr('src');
+           
+            // Make cover absolute
+           cover = cover ? this.baseUrl + cover : null;
 
-        const id = $book.attr('data-item-id') || bookUrl.split('/').pop();
 
-        if (title && bookUrl && authors.length > 0) {
+            const id = $book.attr('data-item-id') || bookUrl.split('/').pop();
+
+
           matches.push({
             id,
             title,
-            authors,
             url: bookUrl,
             cover,
-            rating,
             source: {
               id: this.id,
               description: this.name,
               link: this.baseUrl,
             },
           });
+        } else {
+             console.warn('No valid bookUrl found:', title);
         }
+
+    } else {
+        console.warn('No bookUrl element found:', title)
+    }
       });
 
       const fullMetadata = await Promise.all(matches.map(match => this.getFullMetadata(match)));
@@ -86,74 +97,53 @@ class BigFinishProvider {
       const response = await axios.get(match.url);
       const $ = cheerio.load(response.data);
 
-      // Get narrator from the "Głosy" row in the details table
-      const narrators = language === 'cz' 
-      ? $('tr:contains("Interpret") td:last-child a')
+      // Get narrator from the "Starring" row in the details table
+      const narrators = 
+      $('tr:contains("Starring") td:last-child a')
         .map((i, el) => $(el).text().trim())
         .get()
-        .join(', ')
-      : $('tr:contains("Głosy") td:last-child a')
+        .join(', ');
+
+      // Get authors from the "Written by" row in the details table
+      const author = 
+      $('tr:contains("Adapted by") td:last-child a')
         .map((i, el) => $(el).text().trim())
         .get()
         .join(', ');
   
-      // Get duration from the "Długość" row
-      const duration = language === 'cz' 
-        ? $('tr:contains("Délka") td:last-child a').text().trim() 
-        : $('tr:contains("Długość") td:last-child a').text().trim();
+      // Get duration from the "Duration" row
+       const duration = 
+        $('li.no-line:contains("Duration:")').text().replace('Duration:','').trim() || null;
 
-      // Get publisher from the "Wydawca" row
-      const publisher = language === 'cz'  
-        ? $('tr:contains("Vydavatel") td:last-child a').text().trim()
-        : $('tr:contains("Wydawca") td:last-child a').text().trim();
 
-      // Get type from the "Typ" row
-      const type = language === 'cz' 
-        ? $('tr:contains("Typ") td:last-child').text().trim()
-        : $('tr:contains("Typ") td:last-child').text().trim()
+      // Get type from the "Product Format:" row
+      const type =
+         $('li.no-line:contains("Product Format:")').text().replace('Product Format:','').trim()  || null;
 
-      // Get categories/genres
-      const genres = language === 'cz'
-        ? $('tr:contains("Kategorie") td:last-child a')
-            .map((i, el) => $(el).text().trim())
-            .get()
-        : $('tr:contains("Kategoria") td:last-child a')
-            .map((i, el) => $(el).text().trim())
-            .get();
-
-      // Get series information
-      const series = $('.Collections__CollectionList-sc-cd06413d-1 a')
-        .map((i, el) => $(el).text().trim())
-        .get();
-
-      // Get rating
-      const rating = parseFloat($('.StarIcon__Label-sc-96b8391b-2').text().trim()) || null;
-      
       // Get description
-      const description = $('.description_description__6gcfq p')
+      const description = $('.tab-content.active article')
         .map((i, el) => $(el).text().trim())
         .get()
         .join('\n\n');
 
       // Get main cover image
-      const cover = $('.ProductTop-styled__Cover-sc-aae7c7ba-0').attr('src') || match.cover;
-
-      const languages = language === 'cz' 
-      ? ['czech'] 
-      : ['polish']
+      let cover = $('.detail-page-image img').attr('src') || match.cover;
+        // Make cover absolute
+       cover = cover ? this.baseUrl + cover : null;
 
       const fullMetadata = {
         ...match,
         cover,
         narrator: narrators,
         duration,
-        publisher,
+        //publisher,
         description,
         type,
-        genres,
-        series: series.length > 0 ? series[0] : undefined, // Taking first series if multiple exist
-        rating,
-        languages, 
+        //genres,
+        //series: series.length > 0 ? series[0] : undefined, // Taking first series if multiple exist
+        //rating,
+        //languages,
+        authors: author ? author.split(',').map(a=> a.trim()) : [],
         identifiers: {
           audioteka: match.id,
         },
@@ -188,22 +178,23 @@ app.get('/search', async (req, res) => {
       matches: results.matches.map(book => ({
         title: book.title,
         subtitle: book.subtitle || undefined,
-        author: book.authors.join(', '),
+        author: book.authors ? book.authors.join(', ') : undefined,
         narrator: book.narrator || undefined,
-        publisher: book.publisher || undefined,
-        publishedYear: book.publishedDate ? new Date(book.publishedDate).getFullYear().toString() : undefined,
+        //publisher: book.publisher || undefined,
+        //publishedYear: book.publishedDate ? new Date(book.publishedDate).getFullYear().toString() : undefined,
         description: book.description || undefined,
         cover: book.cover || undefined,
-        isbn: book.identifiers?.isbn || undefined,
-        asin: book.identifiers?.asin || undefined,
-        genres: book.genres || undefined,
-        tags: book.tags || undefined,
-        series: book.series ? [{
-          series: book.series,
-          sequence: undefined // Audioteka doesn't seem to provide sequence numbers
-        }] : undefined,
-        language: book.languages && book.languages.length > 0 ? book.languages[0] : undefined,
-        duration: book.duration || undefined
+        //isbn: book.identifiers?.isbn || undefined,
+        //asin: book.identifiers?.asin || undefined,
+       // genres: book.genres || undefined,
+        //tags: book.tags || undefined,
+        //series: book.series ? [{
+        // series: book.series,
+         // sequence: undefined // Audioteka doesn't seem to provide sequence numbers
+        //}] : undefined,
+        //language: book.languages && book.languages.length > 0 ? book.languages[0] : undefined,
+        duration: book.duration || undefined,
+        type: book.type || undefined,
       }))
     };
 
@@ -216,5 +207,5 @@ app.get('/search', async (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Audioteka provider listening on port ${port} and language is set to ${language}`);
+  console.log(`BigFinish provider listening on port ${port}`);
 });
