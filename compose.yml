@@ -1,7 +1,7 @@
 ---
 services:
   bfpsearch-abs:
-    image: JarrodMiller/bfpsearch-abs
+    image: jarrodmiller/bfpsearch-abs
     container_name: bfpsearch-abs
     environment:
       - LANGUAGE=en
