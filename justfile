@@ -1,0 +1,2 @@
+test:
+	hurl --test hurlfile

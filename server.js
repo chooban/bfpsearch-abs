@@ -207,9 +207,6 @@ async getFullMetadata(match, query) {
     series = seriesParts.slice(1).join(' - ')
 
     let part = Number.parseInt($('.product-desc h3').text().trim().split(' ')[0])
-    if (match.title.endsWith(part)) {
-      match.title = match.title.slice(0, -1 * ("" + part).length).trim()
-    }
     
     releasesSeries.push({
       series, sequence: part
