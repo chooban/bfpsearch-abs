@@ -37,13 +37,13 @@ class BigFinishProvider {
       const response = await axios.get(searchUrl);
       const $ = cheerio.load(response.data);
 
-      console.log('Search URL:', searchUrl);
+      // console.log('Search URL:', searchUrl);
 
       const matches = [];
       const $books = $('.grid-box'); // Books are in this container
-      console.log('Number of books found:', $books.length);
+      // console.log('Number of books found:', $books.length);
 
-      $books.each((index, element) => {
+      $books.each((_index, element) => {
         const $book = $(element);
         
         const title = $book.find('.title').text().trim();
@@ -54,13 +54,12 @@ class BigFinishProvider {
           let bookUrl = relativeBookUrl ? this.baseUrl + relativeBookUrl : null;
           
           if (bookUrl) {
-            console.log('bookUrl:', bookUrl);
+            // console.log('bookUrl:', bookUrl);
             let cover = $book.find('.grid-pict img').attr('src');
             cover = cover ? this.baseUrl + cover : null;
 
             const id = $book.attr('data-item-id') || bookUrl.split('/').pop();
 
-            console.log(process.env.STRIP_TITLE)
             matches.push({
               id,
               title: process.env.STRIP_TITLE === 'true' ? title.split(':').slice(1).join(":").trim() : title,
@@ -92,7 +91,7 @@ class BigFinishProvider {
 // Fetching full metadata for each book
 async getFullMetadata(match, query) {
   try {
-    console.log(`Fetching full metadata for: ${match.title}`);
+    // console.log(`Fetching full metadata for: ${match.title}`);
     const response = await axios.get(match.url);
     const $ = cheerio.load(response.data);
 
@@ -103,7 +102,7 @@ async getFullMetadata(match, query) {
       .attr('href');
 
     if (castTabLink) {
-      console.log('Found Cast tab');
+      // console.log('Found Cast tab');
       // Find the corresponding tab content (e.g., #tab5)
       const castTabContent = $(`${castTabLink}`).closest('.tab-content'); // Find the related tab-content
 
@@ -121,7 +120,7 @@ async getFullMetadata(match, query) {
 
     // If no "Cast" tab, fall back to the "Starring" list under product description
     if (narrators.length === 0) {
-      console.log('Cast tab not found, falling back to Starring');
+      // console.log('Cast tab not found, falling back to Starring');
       narrators = $('div.product-desc .comma-seperate-links')
         .filter((i, el) => $(el).text().toLowerCase().includes('starring'))
         .find('a')
@@ -131,7 +130,7 @@ async getFullMetadata(match, query) {
     }
 
     // Get authors from "Written by" section (comma-separate-links)
-    const authors = [];
+    let authors = [];
     $('li.comma-seperate-links')
       .filter((i, el) => $(el).text().includes('Written by'))
       .each((i, el) => {
@@ -164,36 +163,54 @@ async getFullMetadata(match, query) {
 
     // Extracting description from the active tab article
     const articleContent = $('.tab-content.active article');
-    let description = null;
     
     let currentStory = null;
     articleContent.find('p').each((i, el) => {
-      const text = $(el).text().trim();
-      
+      const paragraphText = $(el).text().trim();
       const strongText = $(el).find('strong').text().trim();
 
       // Match the query against the story title (strong text)
       if (strongText && strongText.toLowerCase().includes(query.toLowerCase())) {
-        if (currentStory) {
-          description = currentStory;  // Store the previous story's description if query matches
-        }
+        console.log(`Found matching story: ${strongText}`);
+        // if (currentStory) {
+        //   description = currentStory;  // Store the previous story's description if query matches
+        // }
         currentStory = {
           title: strongText,
-          description: text.replace(strongText, '').trim(),
+          description: '',
         };
-      } else if (currentStory) {
-        currentStory.description += ' ' + text;
-      }
+      } else if (!strongText && currentStory) {
+        // This isn't strong text, so we append to the current story's description
+        console.log(`Appending to current story: ${paragraphText}`);
+        currentStory.description += ' ' + paragraphText;
+      } 
     });
 
+    let description = null;
+    let title = match.title;
     // If the last story matches the query, store it
     if (currentStory && currentStory.title.toLowerCase().includes(query.toLowerCase())) {
-      description = currentStory;
+      console.log(`Final matching story: ${JSON.stringify(currentStory)}`);
+      description = currentStory.description;
+      
+      // Now we need to extract numbering, title, and authors from the title
+      const authorParts = currentStory.title.split('by');
+      if (authorParts.length > 1) {
+        authors = authorParts[1].trim().split(',').map(author => author.trim());
+      }
+      
+      const numberAndTitleParts = authorParts[0].split(' ');
+      
+      title = numberAndTitleParts.slice(1).join(' ').trim(); // Join everything after the first part
+      
+    } else {
+      description = articleContent.text().trim(); // Fallback to the entire article content if no match found
     }
 
     // Clean up the description: Ensure it's a string and remove unwanted text
+    // console.log('Description before cleanup:', description);
     if (description && typeof description === 'string') {
-      description = description.replace("**THIS TITLE IS NOW OUT OF PRINT ON CD**", "").trim();
+      description = description.replace(/\*\*.*\*\*/, "").trim();
     }  
     
     // Get main cover image
@@ -212,18 +229,33 @@ async getFullMetadata(match, query) {
       series, sequence: part
     })
     
-    if (series.endsWith("Special Releases")) {
+    if (currentStory) {
       // Shove the title into a series as well.
       console.log('Adding the title as a series')
+      const numberParts = currentStory.title.split(' ');
+      const numberSubparts = numberParts[0].split('.')
+      
+      console.log(`Getting the sequence from the title: ${currentStory.title}`);
+      console.log(`Number subparts: ${numberSubparts}`);
+      console.log(`Number subparts length: ${numberSubparts.length}`);
+      let sequence = part || 1;
+      if (numberSubparts.length > 1 && Number.isInteger(Number.parseInt(numberSubparts[1]))) {
+        console.log(`Using second part of number subparts: ${numberSubparts[1]}`);
+        sequence = Number.parseInt(numberSubparts[1]);
+      } else {
+        console.log(`Using first part of number subparts: ${numberSubparts[0]}`);
+        sequence = Number.parseInt(numberSubparts[0]);
+      }
       releasesSeries.push({
         series: match.title,
-        sequence: part,
+        sequence,
       })
     }
    
 
     const fullMetadata = {
       ...match,
+      title,
       cover,
       narrator: narrators || null,  // Ensure narrators is null if empty
       duration,

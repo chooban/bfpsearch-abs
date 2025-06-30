@@ -1,7 +1,7 @@
 GET http://localhost:3001/search?query=Fallen+Angels
 HTTP 200
 [Asserts]
-jsonpath "$.matches[0].title" == "Classic Doctors New Monsters 1"
+jsonpath "$.matches[0].title" == "Fallen Angels"
 jsonpath "$.matches[0].series[0].series" == "Classic Series - Special Releases"
 jsonpath "$.matches[0].series[0].sequence" == 1
 jsonpath "$.matches[0].series[1].series" == "Classic Doctors New Monsters 1"
@@ -13,3 +13,13 @@ HTTP 200
 jsonpath "$.matches[0].title" == "Zagreus"
 jsonpath "$.matches[0].series[0].series" == "The Monthly Adventures"
 jsonpath "$.matches[0].series[0].sequence" == 50
+
+
+GET http://localhost:3001/search?query=Jabari+Countdown
+HTTP 200
+[Asserts]
+jsonpath "$.matches[0].title" == "The Jabari Countdown"
+jsonpath "$.matches[0].series[0].series" == "The Seventh Doctor Adventures"
+jsonpath "$.matches[0].series[0].sequence" == 1
+jsonpath "$.matches[0].series[1].series" == "The Seventh Doctor New Adventures Volume 01"
+jsonpath "$.matches[0].series[1].sequence" == 3
