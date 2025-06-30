@@ -3,12 +3,14 @@
   "version": "1.1.0",
   "main": "server.js",
   "scripts": {
+    "watch": "node --watch server.js",
     "build": "esbuild server.js --platform=node --bundle --outdir=dist"
   },
   "dependencies": {
     "axios": "^1.6.2",
     "cheerio": "^1.0.0-rc.12",
     "cors": "^2.8.5",
+    "dotenv": "^17.0.0",
     "express": "^4.18.2"
   },
   "devDependencies": {

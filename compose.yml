@@ -1,10 +1,12 @@
 ---
 services:
   bfpsearch-abs:
-    image: jarrodmiller/bfpsearch-abs
+    build: .
     container_name: bfpsearch-abs
     environment:
       - LANGUAGE=en
+      - USE_CORS=false
+      - USE_AUTH=false
     restart: unless-stopped
     ports:
       - "3001:3001"

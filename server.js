@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const express = require('express');
 const axios = require('axios');
 const cheerio = require('cheerio');
@@ -58,9 +60,10 @@ class BigFinishProvider {
 
             const id = $book.attr('data-item-id') || bookUrl.split('/').pop();
 
+            console.log(process.env.STRIP_TITLE)
             matches.push({
               id,
-              title,
+              title: process.env.STRIP_TITLE === 'true' ? title.split(':').slice(1).join(":").trim() : title,
               url: bookUrl,
               cover,
               source: {
@@ -196,6 +199,31 @@ async getFullMetadata(match, query) {
     // Get main cover image
     let cover = $('.detail-page-image img').attr('src') || match.cover;
     cover = cover ? this.baseUrl + cover : null;
+    
+    // Get the series's
+    const releasesSeries = []
+    let series = $('.product-desc h6').text().trim()
+    const seriesParts = series.split(' - ')
+    series = seriesParts.slice(1).join(' - ')
+
+    let part = Number.parseInt($('.product-desc h3').text().trim().split(' ')[0])
+    if (match.title.endsWith(part)) {
+      match.title = match.title.slice(0, -1 * ("" + part).length).trim()
+    }
+    
+    releasesSeries.push({
+      series, sequence: part
+    })
+    
+    if (series.endsWith("Special Releases")) {
+      // Shove the title into a series as well.
+      console.log('Adding the title as a series')
+      releasesSeries.push({
+        series: match.title,
+        sequence: part,
+      })
+    }
+   
 
     const fullMetadata = {
       ...match,
@@ -210,6 +238,7 @@ async getFullMetadata(match, query) {
       },
       publishedYear: year, // Adding the year to the publishedYear field
       publisher: "Big Finish Productions", // Always set publisher to "Big Finish Productions"
+      series: releasesSeries,
     };
 
     console.log(`Full metadata for ${match.title}:`, JSON.stringify(fullMetadata, null, 2));
@@ -250,6 +279,7 @@ app.get('/search', async (req, res) => {
         type: book.type || undefined,
         publishedYear: book.publishedYear || undefined, // Include the published year
         publisher: book.publisher || 'Big Finish Productions', // Always include publisher
+        series: book.series || undefined,
       }))
     };
 

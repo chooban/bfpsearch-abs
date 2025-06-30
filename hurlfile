@@ -1,0 +1,15 @@
+GET http://localhost:3001/search?query=Fallen+Angels
+HTTP 200
+[Asserts]
+jsonpath "$.matches[0].title" == "Classic Doctors New Monsters"
+jsonpath "$.matches[0].series[0].series" == "Classic Series - Special Releases"
+jsonpath "$.matches[0].series[0].sequence" == 1
+jsonpath "$.matches[0].series[1].series" == "Classic Doctors New Monsters"
+jsonpath "$.matches[0].series[1].sequence" == 1
+
+GET http://localhost:3001/search?query=Zagreus
+HTTP 200
+[Asserts]
+jsonpath "$.matches[0].title" == "Zagreus"
+jsonpath "$.matches[0].series[0].series" == "The Monthly Adventures"
+jsonpath "$.matches[0].series[0].sequence" == 50
