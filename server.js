@@ -6,15 +6,16 @@ const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 3001;
 
-app.use(cors());
+
+process.env.USE_CORS === 'true' ?? app.use(cors());
 
 // Middleware to check for AUTHORIZATION header (optional for now)
-app.use((req, res, next) => {
-  const apiKey = req.headers['authorization'];
-  if (!apiKey) {
-    return res.status(401).json({ error: 'Unauthorized' });
-  }
-  next();
+process.env.USE_AUTH === 'true' ?? app.use((req, res, next) => {
+ const apiKey = req.headers['authorization'];
+ if (!apiKey) {
+   return res.status(401).json({ error: 'Unauthorized' });
+ }
+ next();
 });
 
 class BigFinishProvider {
