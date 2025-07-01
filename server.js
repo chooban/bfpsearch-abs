@@ -202,7 +202,6 @@ async getFullMetadata(match, query) {
       const numberAndTitleParts = authorParts[0].split(' ');
       
       title = numberAndTitleParts.slice(1).join(' ').trim(); // Join everything after the first part
-      
     } else {
       description = articleContent.text().trim(); // Fallback to the entire article content if no match found
     }
@@ -223,17 +222,33 @@ async getFullMetadata(match, query) {
     const seriesParts = series.split(' - ')
     series = seriesParts.slice(1).join(' - ')
 
-    let part = Number.parseInt($('.product-desc h3').text().trim().split(' ')[0])
+    let part = $('.product-desc h3').text().trim().split(' ')[0].split('.').filter(x => !!x)
+    console.log(`Adding series: ${series} with part: ${part}`);
     
-    releasesSeries.push({
-      series, sequence: part
-    })
+    if (part.length === 2) {
+      // This means we have a sequence like "1.1" or "2.3"
+      if (!series.endsWith(part[0])) {
+        console.log(`Series "${series}" does not end with part "${part[0]}". Adjusting series name.`);
+        releasesSeries.push({
+          series: `${series} ${part[0]}`, sequence: Number.parseInt(part[1])
+        });
+        
+        releasesSeries.push({
+          series: series, sequence: Number.parseInt(part[0])
+        })
+      }
+    } else {
+      releasesSeries.push({
+        series, sequence: Number.parseInt(part[0])
+      })
+    }
+    
     
     if (currentStory) {
       // Shove the title into a series as well.
       console.log('Adding the title as a series')
       const numberParts = currentStory.title.split(' ');
-      const numberSubparts = numberParts[0].split('.')
+      const numberSubparts = numberParts[0].split('.').filter(x => !!x);
       
       console.log(`Getting the sequence from the title: ${currentStory.title}`);
       console.log(`Number subparts: ${numberSubparts}`);
@@ -250,6 +265,8 @@ async getFullMetadata(match, query) {
         series: match.title,
         sequence,
       })
+    } else {
+      console.log('No current story found, not adding title as series');
     }
    
 
