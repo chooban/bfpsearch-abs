@@ -36,7 +36,7 @@ jsonpath "$.matches[1].series" count == 2
 jsonpath "$.matches[1].series[0].series" == "The Lost Stories - Volume 3"
 jsonpath "$.matches[1].series[0].sequence" == 5
 jsonpath "$.matches[1].series[1].series" == "The Lost Stories"
-jsonpath "$.matches[1].series[1].sequence" == 3
+jsonpath "$.matches[1].series[1].sequence" == null
 
 
 GET http://localhost:3001/search?query=Blood+of+the+Daleks
@@ -47,10 +47,32 @@ jsonpath "$.matches[0].series" count == 2
 jsonpath "$.matches[0].series[0].series" == "The Eighth Doctor Adventures - Volume 1"
 jsonpath "$.matches[0].series[0].sequence" == 2
 jsonpath "$.matches[0].series[1].series" == "The Eighth Doctor Adventures"
-jsonpath "$.matches[0].series[1].sequence" == 1
+jsonpath "$.matches[0].series[1].sequence" == null
 jsonpath "$.matches[1].title" == "Blood of the Daleks Part 1"
 jsonpath "$.matches[1].series" count == 2
 jsonpath "$.matches[1].series[0].series" == "The Eighth Doctor Adventures - Volume 1"
 jsonpath "$.matches[1].series[0].sequence" == 1
 jsonpath "$.matches[1].series[1].series" == "The Eighth Doctor Adventures"
-jsonpath "$.matches[1].series[1].sequence" == 1
+jsonpath "$.matches[1].series[1].sequence" == null
+
+
+GET http://localhost:3001/search?query=exterminators&author=Nicholas+Briggs
+HTTP 200
+[Asserts]
+jsonpath "$.matches[0].title" == "The Exterminators"
+jsonpath "$.matches[0].series" count == 2
+jsonpath "$.matches[0].series[0].series" == "Dalek Empire - Volume 3"
+jsonpath "$.matches[0].series[0].sequence" == 1
+jsonpath "$.matches[0].series[1].series" == "Dalek Empire"
+jsonpath "$.matches[0].series[1].sequence" == null
+
+
+GET http://localhost:3001/search?query=dalek+war&author=Nicholas+Briggs
+HTTP 200
+[Asserts]
+jsonpath "$.matches[0].title" == "The Exterminators"
+jsonpath "$.matches[0].series[0].series" == "Dalek Empire - Volume 3"
+
+jsonpath "$.matches[7].title" == "Dalek War Chapter 4"
+jsonpath "$.matches[7].series[0].series" == "Dalek Empire - Volume 2"
+jsonpath "$.matches[7].series[0].sequence" == 4

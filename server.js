@@ -176,7 +176,7 @@ async getFullMetadata(match, query) {
         if (strongText.toLowerCase().startsWith('note')) {
           console.log(`Skipping note: ${strongText}`);
           // Skip notes
-        } else if (strongText.toLowerCase().includes(query.toLowerCase())) {
+        } else if (strongText.toLowerCase().includes(query.toLowerCase() + ' by')) {
           console.log(`Found matching story: ${strongText}`);
           // if (currentStory) {
           //   description = currentStory;  // Store the previous story's description if query matches
@@ -226,8 +226,10 @@ async getFullMetadata(match, query) {
     // Get the series's
     const releasesSeries = []
     let series = $('.product-desc h6').text().trim()
-    const seriesParts = series.split(' - ')
-    series = seriesParts.slice(1).join(' - ')
+    if (series.indexOf('-') > -1) {
+      const seriesParts = series.split(' - ')
+      series = seriesParts.slice(1).join(' - ')
+    }
 
     let part = $('.product-desc h3').text().trim().split(' ')[0].split('.').filter(x => !!x)
     console.log(`Adding series: ${series} with part: ${part}`);
@@ -241,8 +243,9 @@ async getFullMetadata(match, query) {
           sequence: Number.parseInt(part[1]),
         });
         
+        // Also add a sequence-less series
         releasesSeries.push({
-          series: series, sequence: Number.parseInt(part[0])
+          series: series, sequence: null,
         })
       }
     } else {
