@@ -59,6 +59,8 @@ class BigFinishProvider {
             cover = cover ? this.baseUrl + cover : null;
 
             const id = $book.attr('data-item-id') || bookUrl.split('/').pop();
+            
+            console.log(`Found book: ${title} (ID: ${id})`);
 
             matches.push({
               id,
@@ -170,15 +172,20 @@ async getFullMetadata(match, query) {
       const strongText = $(el).find('strong').text().trim();
 
       // Match the query against the story title (strong text)
-      if (strongText && strongText.toLowerCase().includes(query.toLowerCase())) {
-        console.log(`Found matching story: ${strongText}`);
-        // if (currentStory) {
-        //   description = currentStory;  // Store the previous story's description if query matches
-        // }
-        currentStory = {
-          title: strongText,
-          description: '',
-        };
+      if (strongText) {
+        if (strongText.toLowerCase().startsWith('note')) {
+          console.log(`Skipping note: ${strongText}`);
+          // Skip notes
+        } else if (strongText.toLowerCase().includes(query.toLowerCase())) {
+          console.log(`Found matching story: ${strongText}`);
+          // if (currentStory) {
+          //   description = currentStory;  // Store the previous story's description if query matches
+          // }
+          currentStory = {
+            title: strongText,
+            description: '',
+          };
+        }
       } else if (!strongText && currentStory) {
         // This isn't strong text, so we append to the current story's description
         console.log(`Appending to current story: ${paragraphText}`);
