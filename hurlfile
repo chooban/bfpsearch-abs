@@ -33,7 +33,7 @@ HTTP 200
 [Asserts]
 jsonpath "$.matches[1].title" == "Power Play"
 jsonpath "$.matches[1].series" count == 2
-jsonpath "$.matches[1].series[0].series" == "The Lost Stories 3"
+jsonpath "$.matches[1].series[0].series" == "The Lost Stories - Volume 3"
 jsonpath "$.matches[1].series[0].sequence" == 5
 jsonpath "$.matches[1].series[1].series" == "The Lost Stories"
 jsonpath "$.matches[1].series[1].sequence" == 3
@@ -44,13 +44,13 @@ HTTP 200
 [Asserts]
 jsonpath "$.matches[0].title" == "Blood of the Daleks Part 2"
 jsonpath "$.matches[0].series" count == 2
-jsonpath "$.matches[0].series[0].series" == "The Eighth Doctor Adventures 1"
+jsonpath "$.matches[0].series[0].series" == "The Eighth Doctor Adventures - Volume 1"
 jsonpath "$.matches[0].series[0].sequence" == 2
 jsonpath "$.matches[0].series[1].series" == "The Eighth Doctor Adventures"
 jsonpath "$.matches[0].series[1].sequence" == 1
 jsonpath "$.matches[1].title" == "Blood of the Daleks Part 1"
 jsonpath "$.matches[1].series" count == 2
-jsonpath "$.matches[1].series[0].series" == "The Eighth Doctor Adventures 1"
+jsonpath "$.matches[1].series[0].series" == "The Eighth Doctor Adventures - Volume 1"
 jsonpath "$.matches[1].series[0].sequence" == 1
 jsonpath "$.matches[1].series[1].series" == "The Eighth Doctor Adventures"
 jsonpath "$.matches[1].series[1].sequence" == 1

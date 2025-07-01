@@ -237,7 +237,8 @@ async getFullMetadata(match, query) {
       if (!series.endsWith(part[0])) {
         console.log(`Series "${series}" does not end with part "${part[0]}". Adjusting series name.`);
         releasesSeries.push({
-          series: `${series} ${part[0]}`, sequence: Number.parseInt(part[1])
+          series: `${series} - Volume ${part[0]}`, 
+          sequence: Number.parseInt(part[1]),
         });
         
         releasesSeries.push({
