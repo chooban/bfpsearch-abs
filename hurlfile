@@ -72,7 +72,13 @@ HTTP 200
 [Asserts]
 jsonpath "$.matches[0].title" == "The Exterminators"
 jsonpath "$.matches[0].series[0].series" == "Dalek Empire - Volume 3"
+jsonpath "$.matches[5].title" == "Dalek War Chapter 4"
+jsonpath "$.matches[5].series[0].series" == "Dalek Empire - Volume 2"
+jsonpath "$.matches[5].series[0].sequence" == 4
 
-jsonpath "$.matches[7].title" == "Dalek War Chapter 4"
-jsonpath "$.matches[7].series[0].series" == "Dalek Empire - Volume 2"
-jsonpath "$.matches[7].series[0].sequence" == 4
+
+GET http://localhost:3001/search?query=project+infinity&author=Nicholas+Briggs
+HTTP 200
+[Asserts]
+jsonpath "$.matches[0].title" == "Project Infinity"
+jsonpath "$.matches[0].series[0].series" == "Dalek Empire - Volume 1"

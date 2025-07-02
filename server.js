@@ -325,7 +325,7 @@ app.get('/search', async (req, res) => {
 
     // Format results according to OpenAPI specification
     const formattedResults = {
-      matches: results.matches.map(book => ({
+      matches: results.matches.filter(b => !!b.title).map(book => ({
         title: book.title,
         subtitle: book.subtitle || undefined,
         author: book.authors ? book.authors.join(', ') : undefined, // List authors if available
