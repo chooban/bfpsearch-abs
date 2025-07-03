@@ -1,6 +1,6 @@
 FROM node:lts-alpine AS build
 WORKDIR /app
-COPY package.json server.js ./
+COPY package.json server.js provider.js ./
 RUN npm install && npm run build
 
 FROM node:lts-alpine
