@@ -212,16 +212,17 @@ class BigFinishProvider {
         series = seriesParts.slice(1).join(' - ')
       }
 
-      let part = $('.product-desc h3').text().trim().split(' ')[0].split('.').filter(x => !!x)
-      console.log(`Adding series: ${series} with part: ${part}`);
+      const titleText = $('.product-desc h3').text().trim();
+      let sequenceParts = titleText.split(' ')[0].split('.').filter(x => !!x)
+      console.log(`Adding series: ${series} with part: ${sequenceParts}`);
       
-      if (part.length === 2) {
+      if (sequenceParts.length === 2) {
         // This means we have a sequence like "1.1" or "2.3"
-        if (!series.endsWith(part[0])) {
-          console.log(`Series "${series}" does not end with part "${part[0]}". Adjusting series name.`);
+        if (!series.endsWith(sequenceParts[0])) {
+          console.log(`Series "${series}" does not end with part "${sequenceParts[0]}". Adjusting series name.`);
           releasesSeries.push({
-            series: `${series} - Volume ${part[0]}`, 
-            sequence: Number.parseInt(part[1]),
+            series: `${series} - Volume ${sequenceParts[0]}`, 
+            sequence: Number.parseInt(sequenceParts[1]),
           });
           
           // Also add a sequence-less series
@@ -230,9 +231,18 @@ class BigFinishProvider {
           })
         }
       } else {
-        releasesSeries.push({
-          series, sequence: Number.parseInt(part[0])
-        })
+        // If we start and end with a number, it's probably a subseries
+        const titleSplit = titleText.split(' ');
+        console.log(`Checking ${titleSplit[titleSplit.length - 1]} for sequence`);
+        if (Number.parseInt(titleSplit[titleSplit.length - 1])) {
+          releasesSeries.push({
+            series, sequence: null
+          })
+        } else {
+          releasesSeries.push({
+            series, sequence: Number.parseInt(sequenceParts[0])
+          })
+        }
       }
       
       
@@ -245,7 +255,7 @@ class BigFinishProvider {
         console.log(`Getting the sequence from the title: ${currentStory.title}`);
         console.log(`Number subparts: ${numberSubparts}`);
         console.log(`Number subparts length: ${numberSubparts.length}`);
-        let sequence = part || 1;
+        let sequence = sequenceParts || 1;
         if (numberSubparts.length > 1 && Number.isInteger(Number.parseInt(numberSubparts[1]))) {
           console.log(`Using second part of number subparts: ${numberSubparts[1]}`);
           sequence = Number.parseInt(numberSubparts[1]);
