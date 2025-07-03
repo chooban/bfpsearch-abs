@@ -2,6 +2,7 @@
   "name": "bfp-provider",
   "version": "1.1.0",
   "main": "server.js",
+  "type":"module",
   "scripts": {
     "watch": "node --watch server.js",
     "build": "esbuild server.js --platform=node --bundle --outdir=dist"
