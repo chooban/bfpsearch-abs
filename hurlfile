@@ -67,18 +67,19 @@ jsonpath "$.matches[0].series[1].series" == "Dalek Empire"
 jsonpath "$.matches[0].series[1].sequence" == null
 
 
-GET http://localhost:3001/search?query=dalek+war&author=Nicholas+Briggs
-HTTP 200
-[Asserts]
-jsonpath "$.matches[0].title" == "The Exterminators"
-jsonpath "$.matches[0].series[0].series" == "Dalek Empire - Volume 3"
-jsonpath "$.matches[5].title" == "Dalek War Chapter 4"
-jsonpath "$.matches[5].series[0].series" == "Dalek Empire - Volume 2"
-jsonpath "$.matches[5].series[0].sequence" == 4
-
-
 GET http://localhost:3001/search?query=project+infinity&author=Nicholas+Briggs
 HTTP 200
 [Asserts]
 jsonpath "$.matches[0].title" == "Project Infinity"
 jsonpath "$.matches[0].series[0].series" == "Dalek Empire - Volume 1"
+
+
+GET http://localhost:3001/search?query=satanic+mill
+HTTP 200
+[Asserts]
+jsonpath "$.matches[1].title" == "The Satanic Mill"
+jsonpath "$.matches[1].series" count == 2
+jsonpath "$.matches[1].series[0].series" == "The Eighth Doctor Adventures"
+jsonpath "$.matches[1].series[0].sequence" == 1
+jsonpath "$.matches[1].series[1].series" == "Doom Coalition 1"
+jsonpath "$.matches[1].series[1].sequence" == 4

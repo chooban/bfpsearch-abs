@@ -150,18 +150,18 @@ class BigFinishProvider {
       let currentStory = null;
       articleContent.find('p').each((i, el) => {
         const paragraphText = $(el).text().trim();
-        const strongText = $(el).find('strong').text().trim();
+        const strongTag = $(el).find('strong');
+        const strongText = strongTag.text().trim();
 
         // Match the query against the story title (strong text)
         if (strongText) {
+          console.log(`Looking for ${query.toLowerCase() + ' by'} in strong text: ${strongText.toLowerCase()}`);
+          console.log(strongText.toLowerCase().includes(query.toLowerCase()));
           if (strongText.toLowerCase().startsWith('note')) {
             console.log(`Skipping note: ${strongText}`);
             // Skip notes
-          } else if (strongText.toLowerCase().includes(query.toLowerCase() + ' by')) {
+          } else if (strongText.toLowerCase().includes(query.toLowerCase()) && !strongTag.parent().is('a')) {
             console.log(`Found matching story: ${strongText}`);
-            // if (currentStory) {
-            //   description = currentStory;  // Store the previous story's description if query matches
-            // }
             currentStory = {
               title: strongText,
               description: '',
