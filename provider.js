@@ -214,7 +214,6 @@ class BigFinishProvider {
 
       const titleText = $('.product-desc h3').text().trim();
       let sequenceParts = titleText.split(' ')[0].split('.').filter(x => !!x)
-      console.log(`Adding series: ${series} with part: ${sequenceParts}`);
       
       if (sequenceParts.length === 2) {
         // This means we have a sequence like "1.1" or "2.3"
@@ -225,13 +224,13 @@ class BigFinishProvider {
             sequence: Number.parseInt(sequenceParts[1]).toString(),
           });
           
-          // Also add a parent series
+          // Also add a parent series, using the full x.x sequence
           releasesSeries.push({
             series: series, sequence: sequenceParts.join('.').toString(),
           })
         }
       } else {
-        // If we start and end with a number, it's probably a subseries
+        // If we start and end with a number, it's probably a subseries, but we don't know where
         const titleSplit = titleText.split(' ');
         console.log(`Checking ${titleSplit[titleSplit.length - 1]} for sequence`);
         if (Number.parseInt(titleSplit[titleSplit.length - 1])) {
