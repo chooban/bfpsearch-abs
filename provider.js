@@ -222,12 +222,12 @@ class BigFinishProvider {
           console.log(`Series "${series}" does not end with part "${sequenceParts[0]}". Adjusting series name.`);
           releasesSeries.push({
             series: `${series} - Volume ${sequenceParts[0]}`, 
-            sequence: Number.parseInt(sequenceParts[1]),
+            sequence: Number.parseInt(sequenceParts[1]).toString(),
           });
           
-          // Also add a sequence-less series
+          // Also add a parent series
           releasesSeries.push({
-            series: series, sequence: null,
+            series: series, sequence: sequenceParts.join('.').toString(),
           })
         }
       } else {
@@ -240,7 +240,7 @@ class BigFinishProvider {
           })
         } else {
           releasesSeries.push({
-            series, sequence: Number.parseInt(sequenceParts[0])
+            series, sequence: Number.parseInt(sequenceParts[0]).toString()
           })
         }
       }
@@ -265,7 +265,7 @@ class BigFinishProvider {
         }
         releasesSeries.push({
           series: match.title,
-          sequence,
+          sequence: sequence.toString(),
         })
       } else {
         console.log('No current story found, not adding title as series');
