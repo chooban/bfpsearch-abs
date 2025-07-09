@@ -1,6 +1,21 @@
 import axios from 'axios';
 import * as cheerio from 'cheerio';
 
+  
+/**
+ * @typedef {object} ProviderSource
+ * @property {string} id - The unique identifier for the provider
+ * @property {string} name - The name of the provider
+ * @property {string} baseUrl - The base URL of the provider's website
+ */
+/**
+  * @typedef {object} SearchMatch
+  * @property {string} id - The unique identifier for the book
+  * @property {string} title - The title of the book from search results (optional)
+  * @property {string} url - The URL of the book from search results
+  * @property {string} cover - The cover image URL of the book from search (optional)
+  * @property {ProviderSource} source - The source information of the provider
+*/
 class BigFinishProvider {
   constructor() {
     this.id = 'bigfinish';
@@ -18,11 +33,8 @@ class BigFinishProvider {
       const response = await axios.get(searchUrl);
       const $ = cheerio.load(response.data);
 
-      // console.log('Search URL:', searchUrl);
-
       const matches = [];
       const $books = $('.grid-box'); // Books are in this container
-      // console.log('Number of books found:', $books.length);
 
       $books.each((_index, element) => {
         const $book = $(element);
@@ -35,14 +47,11 @@ class BigFinishProvider {
           let bookUrl = relativeBookUrl ? this.baseUrl + relativeBookUrl : null;
           
           if (bookUrl) {
-            // console.log('bookUrl:', bookUrl);
             let cover = $book.find('.grid-pict img').attr('src');
             cover = cover ? this.baseUrl + cover : null;
 
             const id = $book.attr('data-item-id') || bookUrl.split('/').pop();
             
-            console.log(`Found book: ${title} (ID: ${id})`);
-
             matches.push({
               id,
               title: process.env.STRIP_TITLE === 'true' ? title.split(':').slice(1).join(":").trim() : title,
@@ -70,9 +79,13 @@ class BigFinishProvider {
       return { matches: [] };
     }
   }
-
-  // Fetching full metadata for each book
-  async getFullMetadata(match, query) {
+  /**
+   * 
+   * @param {SearchMatch} match - Information about search results from the previous step
+   * @param {string} query - The query used when searching for a book
+   * @returns 
+   */
+  async getFullMetadata(match, query = '') {
     try {
       // console.log(`Fetching full metadata for: ${match.title}`);
       const response = await axios.get(match.url);
@@ -175,7 +188,7 @@ class BigFinishProvider {
       });
 
       let description = null;
-      let title = match.title;
+      let title = '';
       // If the last story matches the query, store it
       if (currentStory && currentStory.title.toLowerCase().includes(query.toLowerCase())) {
         console.log(`Final matching story: ${JSON.stringify(currentStory)}`);
@@ -213,6 +226,7 @@ class BigFinishProvider {
       }
 
       const titleText = $('.product-desc h3').text().trim();
+      const releaseTitle = titleText.split(':').slice(1).join(':').trim();
       let sequenceParts = titleText.split(' ')[0].split('.').filter(x => !!x)
       
       if (sequenceParts.length === 2) {
@@ -263,7 +277,7 @@ class BigFinishProvider {
           sequence = Number.parseInt(numberSubparts[0]);
         }
         releasesSeries.push({
-          series: match.title,
+          series: releaseTitle,
           sequence: sequence.toString(),
         })
       } else {

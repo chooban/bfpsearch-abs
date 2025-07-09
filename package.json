@@ -2,7 +2,7 @@
   "name": "bfp-provider",
   "version": "1.1.0",
   "main": "server.js",
-  "type":"module",
+  "type": "module",
   "scripts": {
     "watch": "node --watch server.js",
     "build": "esbuild server.js --platform=node --bundle --outdir=dist"
@@ -12,9 +12,18 @@
     "cheerio": "^1.0.0-rc.12",
     "cors": "^2.8.5",
     "dotenv": "^17.0.0",
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "jest": "^30.0.4"
   },
   "devDependencies": {
+    "@babel/core": "^7.28.0",
+    "@babel/preset-env": "^7.28.0",
+    "babel-jest": "^30.0.4",
     "esbuild": "^0.24.0"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.js$": "babel-jest"
+    }
   }
 }

@@ -1,0 +1,369 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`BigFinishProvider Integration search should return results for a valid query 1`] = `
+{
+  "authors": [
+    "Phil Mulryne",
+  ],
+  "cover": "https://www.bigfinish.com/image/release/1315/large.jpg",
+  "description": "2015: When sightseers Joel and Gabby Finch encounter a strange man in Edwardian cricketing garb in the Sistine Chapel, their honeymoon suddenly takes a terrifying turn. 1511: Michelangelo is commissioned to create some very special sculptures by a mysterious sect. But as he carves, angels seem to emerge fully-formed from the rock. Almost as if they are alive… From Michelangelo’s workshop to the catacombs of Rome, the Fifth Doctor must keep his wits about him and his eyes wide open as he confronts the Weeping Angels. The Sixth Doctor is no stranger to courtroom drama, but faces a very different challenge when he prepares to defend a most unusual Judoon. After an environmental clearance mission goes wrong, Captain Kybo of the Nineteenth Judoon Interplantary Force is stranded in Victorian England, bound in chains, an exhibit in a circus show. But he has allies: Eliza Jenkins – known to audiences as ‘Thomasina Thumb’ – and the larger-than-life ‘clown’ in the colourful coat. Uncovering a trail of injustice and corruption, the Doctor and Kybo soon find themselves on trial for their lives... In the far future, humanity has a remedy for everything. Whatever the problem, Pharma Corps has the answer and a designer disease tailored to every human’s blood-type. Zanzibar Hashtag has no need to be sad, scared, stressed, or depressed ever again. That is, until vicious aliens arrive on her space station intent on opening its Vault. What will it mean for the human race if the Sycorax take control of what’s inside? And when the Seventh Doctor arrives on the scene, can he convince Zanzibar to care about her life long enough to help him? An instant of the Time War brings centuries of conflict to the planet Drakkis, and the Eighth Doctor is there to witness the terrible results. A Sontaran fleet, desperate to join the epic conflict, follows in its wake to take advantage of the fallout. But when Commander Jask is beamed down to the ravaged surface, there is more to his arrival than first appears. Soon, an unlikely champion joins forces with the Time Lord to fight for the future of her world, and together they must face the Sontaran Ordeal…",
+  "duration": "329 minutes",
+  "id": "12345",
+  "identifiers": {
+    "bigfinish": "12345",
+  },
+  "narrator": "Peter Davison, Colin Baker, Sylvester McCoy, Paul McGann, Nicholas Briggs, Rebecca Callard, Sean Connolly, Trevor Cooper, Alex Deacon, Sacha Dhawan, Barnaby Edwards, Jonathan Firth, Sabina Franklyn, Joe Jameson, Matthew Kelly, Tony Millan, Diane Morgan, Nisha Nayar, Nicholas Pegg, Christopher Ryan, Josette Simon, Kiruna Stamell, Dan Starkey, Giles Watling",
+  "publishedYear": "2016",
+  "publisher": "Big Finish Productions",
+  "series": [
+    {
+      "sequence": null,
+      "series": "Classic Series - Special Releases",
+    },
+    {
+      "sequence": "1",
+      "series": "Classic Doctors New Monsters 1",
+    },
+  ],
+  "title": "Fallen Angels",
+  "type": "5-disc CD (slipcover boxset)",
+  "url": "https://www.bigfinish.com/releases/v/doctor-who-classic-doctors-new-monsters-1-1315",
+}
+`;
+
+exports[`BigFinishProvider Integration searching for 'blood of the daleks' should return results 1`] = `
+[
+  {
+    "authors": [
+      "Steve Lyons",
+    ],
+    "cover": "https://www.bigfinish.com/image/release/516/large.jpg",
+    "description": ""The crashed ship. The one Tom Cardwell saw all those years ago. And you borrowed its technology, didn't you? Maybe even found a Dalek or two in the wreckage. Dead, but intact. And you began to turn human beings into creatures like them. You did that? I'm right, aren't I?"
+
+Note: This adventure continues from Doctor Who: Blood of the Daleks Part 1",
+    "duration": "73 minutes",
+    "id": "doctor-who-blood-of-the-daleks-part-2-516",
+    "identifiers": {
+      "bigfinish": "doctor-who-blood-of-the-daleks-part-2-516",
+    },
+    "narrator": "Paul McGann, Sheridan Smith, Hayley Atwell, Nicholas Briggs, Kenneth Cranham, Anita Dobson, Gerry O'Toole, Katarina Olsson",
+    "publishedYear": "2007",
+    "publisher": "Big Finish Productions",
+    "series": [
+      {
+        "sequence": "2",
+        "series": "The Eighth Doctor Adventures - Volume 1",
+      },
+      {
+        "sequence": "1.2",
+        "series": "The Eighth Doctor Adventures",
+      },
+    ],
+    "source": {
+      "description": "BigFinish",
+      "id": "bigfinish",
+      "link": "https://www.bigfinish.com",
+    },
+    "title": "",
+    "type": "1-disc CD (jewel case)",
+    "url": "https://www.bigfinish.com/releases/v/doctor-who-blood-of-the-daleks-part-2-516",
+  },
+  {
+    "authors": [
+      "Steve Lyons",
+    ],
+    "cover": "https://www.bigfinish.com/image/release/515/large.jpg",
+    "description": ""People of Red Rocket Rising, my fellow citizens. Our long night is over. I've been contacted by a benevolent people. They too have known great trials, but they have overcome them and made it their mission to help others do the same. They have offered us refuge, and passage to the nearest human worlds. They have the resources, and the patience and compassion, to evacuate every one of us. My fellow citizens, my friends, rescue is at hand!"
+
+Note: The adventure continues in Doctor Who: Blood of the Daleks Part 2",
+    "duration": "65 minutes",
+    "id": "doctor-who-blood-of-the-daleks-part-1-515",
+    "identifiers": {
+      "bigfinish": "doctor-who-blood-of-the-daleks-part-1-515",
+    },
+    "narrator": "Paul McGann, Sheridan Smith, Hayley Atwell, Nicholas Briggs, Kenneth Cranham, Anita Dobson, Gerry O'Toole, Katarina Olsson",
+    "publishedYear": "2007",
+    "publisher": "Big Finish Productions",
+    "series": [
+      {
+        "sequence": "1",
+        "series": "The Eighth Doctor Adventures - Volume 1",
+      },
+      {
+        "sequence": "1.1",
+        "series": "The Eighth Doctor Adventures",
+      },
+    ],
+    "source": {
+      "description": "BigFinish",
+      "id": "bigfinish",
+      "link": "https://www.bigfinish.com",
+    },
+    "title": "",
+    "type": "1-disc CD (jewel case)",
+    "url": "https://www.bigfinish.com/releases/v/doctor-who-blood-of-the-daleks-part-1-515",
+  },
+  {
+    "authors": [
+      "Steve Lyons",
+    ],
+    "cover": "https://www.bigfinish.com/image/release/2944/large.jpg",
+    "description": "But will their dreams turn to dust at a service station somewhere on the M62, besieged by a pack of alien monsters? This release includes language that may be considered offensive or insensitive by today's standards.",
+    "duration": "549 minutes",
+    "id": "doctor-who-the-eighth-doctor-and-lucie-miller-series-01-2944",
+    "identifiers": {
+      "bigfinish": "doctor-who-the-eighth-doctor-and-lucie-miller-series-01-2944",
+    },
+    "narrator": "Paul McGann, Sheridan Smith, Hayley Atwell, Owen Brenman, Nicholas Briggs, Clare Buckfield, Tom Chadbon, Kenneth Cranham, Bernard Cribbins, Anita Dobson, David Dobson, Barnaby Edwards, Louise Fullerton, Stephen Gately, Nickolas Grace, Elspet Gray, Lynsey Hardwick, Nigel Havers, Jennifer Higham, Tim Hudson, Nerys Hughes, Roy Marsden, Jake McGann, Julia McKenzie, Ian McNeice, Gerry O'Toole, Katarina Olsson, John Schwab, Ben Silverstone, Anthony Spargo, Una Stubbs, Tim Sutton, Timothy West, Andy Wisher",
+    "publishedYear": "2023",
+    "publisher": "Big Finish Productions",
+    "series": [
+      {
+        "sequence": null,
+        "series": "The Eighth Doctor Adventures",
+      },
+      {
+        "sequence": "2",
+        "series": "The Eighth Doctor and Lucie Miller Series 01",
+      },
+    ],
+    "source": {
+      "description": "BigFinish",
+      "id": "bigfinish",
+      "link": "https://www.bigfinish.com",
+    },
+    "title": "Blood of the Daleks Part 2",
+    "type": "0-digital download",
+    "url": "https://www.bigfinish.com/releases/v/doctor-who-the-eighth-doctor-and-lucie-miller-series-01-2944",
+  },
+]
+`;
+
+exports[`BigFinishProvider Integration searching for 'exterminators' should return results 1`] = `
+{
+  "authors": [
+    "Nicholas Briggs",
+  ],
+  "cover": "https://www.bigfinish.com/image/release/353/large.jpg",
+  "description": "At the end of Dalek Empire II: Dalek War, Galactic Union envoy Siy Tarkov set off from the planet Valyshaa with vital information warning of an imminent Dalek invasion of the galaxy.
+
+Twenty years later, and the only proof Tarkov ever existed is a garbled message, calling for help. But no-one is listening.",
+  "duration": "73 minutes",
+  "id": "dalek-empire-the-exterminators-353",
+  "identifiers": {
+    "bigfinish": "dalek-empire-the-exterminators-353",
+  },
+  "narrator": "David Tennant, William Gaunt, Ishia Bennison, Nicholas Briggs, Ian Brooker, Dannie Carr, Greg Donaldson, Steven Elder, Claudia Elmhirst, Peter Forbes, Jane Goddard, Karen Henson, Oliver Hume, Sean Jackson, Jeremy James, Colin McIntyre, Sarah Mowat, Laura Rees, David Sax, Dot Smith, Octavia Walters, Philip Wolff",
+  "publishedYear": "2004",
+  "publisher": "Big Finish Productions",
+  "series": [
+    {
+      "sequence": "1",
+      "series": "Dalek Empire - Volume 3",
+    },
+    {
+      "sequence": "3.1",
+      "series": "Dalek Empire",
+    },
+  ],
+  "source": {
+    "description": "BigFinish",
+    "id": "bigfinish",
+    "link": "https://www.bigfinish.com",
+  },
+  "title": "",
+  "type": "1-disc CD (jewel case)",
+  "url": "https://www.bigfinish.com/releases/v/dalek-empire-the-exterminators-353",
+}
+`;
+
+exports[`BigFinishProvider Integration searching for 'jabari countdown' should return results 1`] = `
+{
+  "authors": [
+    "Alan Flanagan",
+  ],
+  "cover": "https://www.bigfinish.com/image/release/1882/large.jpg",
+  "description": null,
+  "duration": "291 minutes",
+  "id": "doctor-who-the-seventh-doctor-new-adventures-volume-01-1882",
+  "identifiers": {
+    "bigfinish": "doctor-who-the-seventh-doctor-new-adventures-volume-01-1882",
+  },
+  "narrator": "Sylvester McCoy, Yasmin Bannerman, Travis Oliver, Mina Anwar, Vikash Bhai, Rhian Blundell, Connor Calland, Silas Carson, Ellie Darvill, Jacob Dudman, Janine Duvitski, Elaine Fellows, John Heffernan, Melanie Kilburn, Olivia Morris, Sara Powell, Leonie Schliesing, Liz Sutherland-Lim, Franchi Webb, Rupert Young",
+  "publishedYear": "2018",
+  "publisher": "Big Finish Productions",
+  "series": [
+    {
+      "sequence": null,
+      "series": "The Seventh Doctor Adventures",
+    },
+    {
+      "sequence": "3",
+      "series": "The Seventh Doctor New Adventures Volume 01",
+    },
+  ],
+  "source": {
+    "description": "BigFinish",
+    "id": "bigfinish",
+    "link": "https://www.bigfinish.com",
+  },
+  "title": "The Jabari Countdown",
+  "type": "5-disc CD (jewel case in slipcover)",
+  "url": "https://www.bigfinish.com/releases/v/doctor-who-the-seventh-doctor-new-adventures-volume-01-1882",
+}
+`;
+
+exports[`BigFinishProvider Integration searching for 'power play' should return results 1`] = `
+{
+  "authors": [
+    "Gary Hopkins",
+  ],
+  "cover": "https://www.bigfinish.com/image/release/417/large.jpg",
+  "description": "It's been many years since Victoria Waterfield travelled through time and space fighting monsters and dictators. Now she's back on Earth fighting for the future of the planet. But are her environmental campaigns so far removed from her former adventures in the vortex?
+
+As trucks carrying nuclear waste start to vanish into the air, her friends are kidnapped by a dangerous alien police force and a nuclear power plant runs dangerously close to meltdown... Victoria spies a familiar blue box.
+
+The Doctor. After all this time, the Doctor has come back.
+
+And now... Victoria Waterfield is going to kill him.",
+  "duration": "149 minutes",
+  "id": "doctor-who-power-play-417",
+  "identifiers": {
+    "bigfinish": "doctor-who-power-play-417",
+  },
+  "narrator": "Colin Baker, Nicola Bryant, Deborah Watling, Victoria Alcock, Andrew Dickens, Greg Donaldson, Howard Gossington, James Hayward, Miles Jupp, David Warwick",
+  "publishedYear": "2012",
+  "publisher": "Big Finish Productions",
+  "series": [
+    {
+      "sequence": "5",
+      "series": "The Lost Stories - Volume 3",
+    },
+    {
+      "sequence": "3.5",
+      "series": "The Lost Stories",
+    },
+  ],
+  "source": {
+    "description": "BigFinish",
+    "id": "bigfinish",
+    "link": "https://www.bigfinish.com",
+  },
+  "title": "",
+  "type": "2-disc CD (jewel case)",
+  "url": "https://www.bigfinish.com/releases/v/doctor-who-power-play-417",
+}
+`;
+
+exports[`BigFinishProvider Integration searching for 'project infinity' should return results 1`] = `
+{
+  "authors": [
+    "Nicholas Briggs",
+  ],
+  "cover": "https://www.bigfinish.com/image/release/358/large.jpg",
+  "description": "The Seers of Yaldos have a sad story to tell, but Alby and Kalendorf know they must listen.
+
+Meanwhile, the Daleks seem unconcerned by their recent defeats. They have their sights firmly fixed on Project Infinity. In the hands of the Daleks, the human race's only hope of victory could signal the destruction of the entire universe.",
+  "duration": "74 minutes",
+  "id": "dalek-empire-project-infinity-358",
+  "identifiers": {
+    "bigfinish": "dalek-empire-project-infinity-358",
+  },
+  "narrator": "Gareth Thomas, Teresa Gallagher, Steve Allen, Simon Bridge, Nicholas Briggs, Ian Brooker, Joyce Gibbs, Jeremy James, Alistair Lock, Robert Lock, Mark McDonnell, Sarah Mowat, David Sax",
+  "publishedYear": "2001",
+  "publisher": "Big Finish Productions",
+  "series": [
+    {
+      "sequence": "4",
+      "series": "Dalek Empire - Volume 1",
+    },
+    {
+      "sequence": "1.4",
+      "series": "Dalek Empire",
+    },
+  ],
+  "source": {
+    "description": "BigFinish",
+    "id": "bigfinish",
+    "link": "https://www.bigfinish.com",
+  },
+  "title": "",
+  "type": "1-disc CD (jewel case)",
+  "url": "https://www.bigfinish.com/releases/v/dalek-empire-project-infinity-358",
+}
+`;
+
+exports[`BigFinishProvider Integration searching for 'satanic mill' should return results 1`] = `
+{
+  "authors": [
+    "Edward Collier",
+  ],
+  "cover": "https://www.bigfinish.com/image/release/1221/large.jpg",
+  "description": "As the Doctor closes in on his quarry, long-buried animosities come boiling to the surface on this ancient and powerful satellite, in a final confrontation that could have unimaginable consequences. And even that is only the beginning...",
+  "duration": "306 minutes",
+  "id": "doctor-who-doom-coalition-1-1221",
+  "identifiers": {
+    "bigfinish": "doctor-who-doom-coalition-1-1221",
+  },
+  "narrator": "Paul McGann, Hattie Morahan, Nicola Walker, Mark Bonnar, Ewan Bailey, John Banks, Robert Bathurst, Gunnar Cauthery, Matthew Cottle, Esther Hall, Caroline Langrishe, Sylvester McCoy, Lizzie Mounter, Harry Myers, Ramon Tikaram, John Voce, Bethan Walker, John Woodvine, David Yelland",
+  "publishedYear": "2015",
+  "publisher": "Big Finish Productions",
+  "series": [
+    {
+      "sequence": null,
+      "series": "The Eighth Doctor Adventures",
+    },
+    {
+      "sequence": "4",
+      "series": "Doom Coalition 1",
+    },
+  ],
+  "source": {
+    "description": "BigFinish",
+    "id": "bigfinish",
+    "link": "https://www.bigfinish.com",
+  },
+  "title": "The Satanic Mill",
+  "type": "5-disc CD (slipcover boxset)",
+  "url": "https://www.bigfinish.com/releases/v/doctor-who-doom-coalition-1-1221",
+}
+`;
+
+exports[`BigFinishProvider Integration searching for 'zagreus' should return results 1`] = `
+{
+  "authors": [
+    "Gary Russell",
+    "Alan Barnes",
+  ],
+  "cover": "https://www.bigfinish.com/image/release/216/large.jpg",
+  "description": "Zagreus sits inside your head.
+
+Zagreus lives among the dead…
+
+Zagreus sees you in your bed
+
+And eats you when you're sleeping.",
+  "duration": "236 minutes",
+  "id": "doctor-who-zagreus-216",
+  "identifiers": {
+    "bigfinish": "doctor-who-zagreus-216",
+  },
+  "narrator": "Peter Davison, Colin Baker, Sylvester McCoy, Paul McGann, Sophie Aldred, Lisa Bowerman, Nicola Bryant, Nicholas Courtney, Stephen Fewell, India Fisher, Louise Jameson, Robert Jezek, Bonnie Langford, John Leeson, Caroline Morris, Stephen Perring, Jon Pertwee, Miles Richardson, Elisabeth Sladen, Maggie Stables, Mark Strickson, Sarah Sutton, Lalla Ward, Don Warrington, Conrad Westmaas, Anneke Wills",
+  "publishedYear": "2003",
+  "publisher": "Big Finish Productions",
+  "series": [
+    {
+      "sequence": "50",
+      "series": "The Monthly Adventures",
+    },
+  ],
+  "source": {
+    "description": "BigFinish",
+    "id": "bigfinish",
+    "link": "https://www.bigfinish.com",
+  },
+  "title": "",
+  "type": "3-disc CD (digipak)",
+  "url": "https://www.bigfinish.com/releases/v/doctor-who-zagreus-216",
+}
+`;
