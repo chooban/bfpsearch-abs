@@ -27,7 +27,6 @@ class BigFinishProvider {
   // Searching for books based on query and optional author
   async searchBooks(query, author = '') {
     try {
-      console.log(`Searching for: "${query}" by "${author}"`);
       const searchUrl = `${this.searchUrl}&search_term=${encodeURIComponent(query)}`;
       
       const response = await axios.get(searchUrl);
@@ -57,11 +56,6 @@ class BigFinishProvider {
               title: process.env.STRIP_TITLE === 'true' ? title.split(':').slice(1).join(":").trim() : title,
               url: bookUrl,
               cover,
-              source: {
-                id: this.id,
-                description: this.name,
-                link: this.baseUrl,
-              },
             });
           } else {
             console.warn('No valid bookUrl found:', title);
@@ -72,7 +66,18 @@ class BigFinishProvider {
         }
       });
 
-      const fullMetadata = await Promise.all(matches.map(match => this.getFullMetadata(match, query)));
+      const fullMetadata = await Promise.all(matches.map(match => {
+        return this.getFullMetadata(match, query).then(fullMatch => {
+          return {
+            ...fullMatch,
+            source: {
+              id: this.id,
+              description: this.name,
+              link: this.baseUrl,
+            },
+          }
+        });
+      }));
       return { matches: fullMetadata };
     } catch (error) {
       console.error('Error searching books:', error.message, error.stack);
@@ -87,7 +92,6 @@ class BigFinishProvider {
    */
   async getFullMetadata(match, query = '') {
     try {
-      // console.log(`Fetching full metadata for: ${match.title}`);
       const response = await axios.get(match.url);
       const $ = cheerio.load(response.data);
 
@@ -98,7 +102,6 @@ class BigFinishProvider {
         .attr('href');
 
       if (castTabLink) {
-        // console.log('Found Cast tab');
         // Find the corresponding tab content (e.g., #tab5)
         const castTabContent = $(`${castTabLink}`).closest('.tab-content'); // Find the related tab-content
 
@@ -116,7 +119,6 @@ class BigFinishProvider {
 
       // If no "Cast" tab, fall back to the "Starring" list under product description
       if (narrators.length === 0) {
-        // console.log('Cast tab not found, falling back to Starring');
         narrators = $('div.product-desc .comma-seperate-links')
           .filter((i, el) => $(el).text().toLowerCase().includes('starring'))
           .find('a')
@@ -168,13 +170,9 @@ class BigFinishProvider {
 
         // Match the query against the story title (strong text)
         if (strongText) {
-          console.log(`Looking for ${query.toLowerCase() + ' by'} in strong text: ${strongText.toLowerCase()}`);
-          console.log(strongText.toLowerCase().includes(query.toLowerCase()));
           if (strongText.toLowerCase().startsWith('note')) {
-            console.log(`Skipping note: ${strongText}`);
             // Skip notes
           } else if (strongText.toLowerCase().includes(query.toLowerCase()) && !strongTag.parent().is('a')) {
-            console.log(`Found matching story: ${strongText}`);
             currentStory = {
               title: strongText,
               description: '',
@@ -182,16 +180,17 @@ class BigFinishProvider {
           }
         } else if (!strongText && currentStory) {
           // This isn't strong text, so we append to the current story's description
-          console.log(`Appending to current story: ${paragraphText}`);
           currentStory.description += ' ' + paragraphText;
         } 
       });
+
+      const titleText = $('.product-desc h3').text().trim();
+      const releaseTitle = titleText.split(':').slice(1).join(':').trim();
 
       let description = null;
       let title = '';
       // If the last story matches the query, store it
       if (currentStory && currentStory.title.toLowerCase().includes(query.toLowerCase())) {
-        console.log(`Final matching story: ${JSON.stringify(currentStory)}`);
         description = currentStory.description;
         
         // Now we need to extract numbering, title, and authors from the title
@@ -205,16 +204,16 @@ class BigFinishProvider {
         title = numberAndTitleParts.slice(1).join(' ').trim(); // Join everything after the first part
       } else {
         description = articleContent.text().trim(); // Fallback to the entire article content if no match found
+        title = releaseTitle;
       }
 
       // Clean up the description: Ensure it's a string and remove unwanted text
-      // console.log('Description before cleanup:', description);
       if (description && typeof description === 'string') {
         description = description.replace(/\*\*.*\*\*/, "").trim();
       }  
       
       // Get main cover image
-      let cover = $('.detail-page-image img').attr('src') || match.cover;
+      let cover = $('.detail-page-image img').attr('src');
       cover = cover ? this.baseUrl + cover : null;
       
       // Get the series's
@@ -225,14 +224,11 @@ class BigFinishProvider {
         series = seriesParts.slice(1).join(' - ')
       }
 
-      const titleText = $('.product-desc h3').text().trim();
-      const releaseTitle = titleText.split(':').slice(1).join(':').trim();
       let sequenceParts = titleText.split(' ')[0].split('.').filter(x => !!x)
       
       if (sequenceParts.length === 2) {
         // This means we have a sequence like "1.1" or "2.3"
         if (!series.endsWith(sequenceParts[0])) {
-          console.log(`Series "${series}" does not end with part "${sequenceParts[0]}". Adjusting series name.`);
           releasesSeries.push({
             series: `${series} - Volume ${sequenceParts[0]}`, 
             sequence: Number.parseInt(sequenceParts[1]).toString(),
@@ -246,7 +242,6 @@ class BigFinishProvider {
       } else {
         // If we start and end with a number, it's probably a subseries, but we don't know where
         const titleSplit = titleText.split(' ');
-        console.log(`Checking ${titleSplit[titleSplit.length - 1]} for sequence`);
         if (Number.parseInt(titleSplit[titleSplit.length - 1])) {
           releasesSeries.push({
             series, sequence: null
@@ -261,31 +256,22 @@ class BigFinishProvider {
       
       if (currentStory) {
         // Shove the title into a series as well.
-        console.log('Adding the title as a series')
         const numberParts = currentStory.title.split(' ');
         const numberSubparts = numberParts[0].split('.').filter(x => !!x);
         
-        console.log(`Getting the sequence from the title: ${currentStory.title}`);
-        console.log(`Number subparts: ${numberSubparts}`);
-        console.log(`Number subparts length: ${numberSubparts.length}`);
         let sequence = sequenceParts || 1;
         if (numberSubparts.length > 1 && Number.isInteger(Number.parseInt(numberSubparts[1]))) {
-          console.log(`Using second part of number subparts: ${numberSubparts[1]}`);
           sequence = Number.parseInt(numberSubparts[1]);
         } else {
-          console.log(`Using first part of number subparts: ${numberSubparts[0]}`);
           sequence = Number.parseInt(numberSubparts[0]);
         }
         releasesSeries.push({
           series: releaseTitle,
           sequence: sequence.toString(),
         })
-      } else {
-        console.log('No current story found, not adding title as series');
-      }
-    
+      }     
 
-      const fullMetadata = {
+      return {
         ...match,
         title,
         cover,
@@ -301,11 +287,7 @@ class BigFinishProvider {
         publisher: "Big Finish Productions", // Always set publisher to "Big Finish Productions"
         series: releasesSeries,
       };
-
-      console.log(`Full metadata for ${match.title}:`, JSON.stringify(fullMetadata, null, 2));
-      return fullMetadata;
     } catch (error) {
-      console.error(`Error fetching full metadata for ${match.title}:`, error.message, error.stack);
       return match; // Fallback to basic metadata
     }
   }
